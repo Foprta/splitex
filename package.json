@@ -26,8 +26,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "test:watch": "craco test --watch",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "version": "conventional-changelog -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +51,7 @@
     "@types/lodash": "^4.14.169",
     "@types/react-router-dom": "^5.1.7",
     "autoprefixer": "^9.8.6",
+    "conventional-changelog-cli": "^2.1.1",
     "postcss": "^7.0.35",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.2"
   }

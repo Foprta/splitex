@@ -1,0 +1,33 @@
+name: Test and Deploy
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  testAndDeploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        
+      - name: Istall deps
+        run: npm install
+
+      - name: Run test
+        run: npm run test
+        
+      - name: Run build
+        run: npm run build
+    
+      - name: SSH Deploy
+        uses: easingthemes/ssh-deploy@v2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+          REMOTE_USER: ${{ secrets.SERVER_USER }}
+          TARGET: ${{ secrets.SERVER_FOLDER }}
+          SOURCE: build
+          ARGS: -av --delete
