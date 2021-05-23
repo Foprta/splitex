@@ -23,6 +23,7 @@ function Users({ users, groupId, expenses }: Props) {
               user={user}
               groupId={groupId}
               expenses={userExpenses}
+              users={users}
             />
           );
         })}

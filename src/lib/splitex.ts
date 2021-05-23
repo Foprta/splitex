@@ -1,12 +1,14 @@
 import { last, first, isEmpty } from "lodash";
 
-export interface IUser {
+export interface IFirestoreEntity {
   id: string;
+}
+
+export interface IUser extends IFirestoreEntity {
   name: string;
 }
 
-export interface IExpense {
-  id: string;
+export interface IExpense extends IFirestoreEntity {
   userId: string;
   amount: number;
 }
@@ -16,6 +18,8 @@ export interface ITransaction {
   toUserId: string;
   amount: number;
 }
+
+export type IManualTransaction = ITransaction & IFirestoreEntity;
 
 export class Splitex {
   users: IUser[]; // Юзеры группы
@@ -30,25 +34,31 @@ export class Splitex {
    * Положительный депозит - сколько юзер должен получить
    * Отрицательный депозит - сколько юзер должен отправить
    */
-  usersDeposits: Record<string, number>;
+  usersDeposits: Record<string, number> = {};
 
   transactions: ITransaction[] = []; // Итоговые переводы
+  manualTransactions: IManualTransaction[]; // Произведённые переводы, которые нужно учесть
 
-  constructor(users: IUser[], expenses: IExpense[]) {
+  constructor(
+    users: IUser[],
+    expenses: IExpense[],
+    transactions?: IManualTransaction[]
+  ) {
     this.users = users;
     this.expenses = expenses;
+    this.manualTransactions = transactions || [];
 
     this.totalCost = expenses.reduce((acc, { amount }) => acc + amount, 0);
     this.averageExpense = this.totalCost / users.length;
 
-    this.usersDeposits = this.calculateUsersDeposits();
-    if (!isEmpty(this.usersDeposits))
-      this.transactions = this.calculateTransactions();
+    this.calculateUsersDeposits();
+
+    if (!isEmpty(this.usersDeposits)) {
+      this.calculateTransactions();
+    }
   }
 
-  private calculateTransactions(): ITransaction[] {
-    const result: ITransaction[] = [];
-
+  private calculateTransactions(): void {
     const bufferedDeposits: Record<string, number> = { ...this.usersDeposits };
 
     let sortedDeposits = this.mapDepositsIntoArray(bufferedDeposits);
@@ -62,12 +72,10 @@ export class Splitex {
       bufferedDeposits[fromUserId] += amount;
       bufferedDeposits[toUserId] -= amount;
 
-      result.push({ fromUserId, toUserId, amount });
+      this.transactions.push({ fromUserId, toUserId, amount });
 
       sortedDeposits = this.mapDepositsIntoArray(bufferedDeposits);
     }
-
-    return result;
   }
 
   private mapDepositsIntoArray(
@@ -78,15 +86,17 @@ export class Splitex {
       .sort((a, b) => b[1] - a[1]);
   }
 
-  private calculateUsersDeposits(): Record<string, number> {
-    const result: Record<string, number> = {};
-
+  private calculateUsersDeposits(): void {
     this.users.forEach(
       ({ id }) =>
-        (result[id] = this.calculateTotalUserExpenses(id) - this.averageExpense)
+        (this.usersDeposits[id] =
+          this.calculateTotalUserExpenses(id) - this.averageExpense)
     );
 
-    return result;
+    this.manualTransactions.forEach(({ fromUserId, toUserId, amount }) => {
+      this.usersDeposits[fromUserId] += amount;
+      this.usersDeposits[toUserId] -= amount;
+    });
   }
 
   private calculateTotalUserExpenses(userId: string): number {
