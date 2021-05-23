@@ -1,4 +1,4 @@
-import { IExpense, Splitex, IUser, ITransaction } from "./splitex";
+import { IExpense, IManualTransaction, IUser, Splitex } from "./splitex";
 
 test("should be created", () => {
   // Arrange
@@ -214,7 +214,7 @@ describe("should calculate users deposits", () => {
       ] as IExpense[],
       [
         { fromUserId: "user2", toUserId: "user5", amount: 1000 },
-      ] as ITransaction[]
+      ] as IManualTransaction[]
     );
 
     // Assert
@@ -377,7 +377,9 @@ describe("should calculate transactions", () => {
           { amount: 500, userId: "user3" },
           { amount: 200, userId: "user6" },
         ] as IExpense[],
-        [{ fromUserId: "user6", toUserId: "user1", amount: 500 }]
+        [
+          { fromUserId: "user6", toUserId: "user1", amount: 500 },
+        ] as IManualTransaction[]
       );
 
       // Assert
@@ -413,7 +415,7 @@ describe("should calculate transactions", () => {
           { fromUserId: "user6", toUserId: "user1", amount: 1250 },
           { fromUserId: "user3", toUserId: "user2", amount: 550 },
           { fromUserId: "user3", toUserId: "user1", amount: 400 },
-        ]
+        ] as IManualTransaction[]
       );
 
       // Assert

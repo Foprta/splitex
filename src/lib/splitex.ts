@@ -1,12 +1,14 @@
 import { last, first, isEmpty } from "lodash";
 
-export interface IUser {
+export interface IFirestoreEntity {
   id: string;
+}
+
+export interface IUser extends IFirestoreEntity {
   name: string;
 }
 
-export interface IExpense {
-  id: string;
+export interface IExpense extends IFirestoreEntity {
   userId: string;
   amount: number;
 }
@@ -16,6 +18,8 @@ export interface ITransaction {
   toUserId: string;
   amount: number;
 }
+
+export type IManualTransaction = ITransaction & IFirestoreEntity;
 
 export class Splitex {
   users: IUser[]; // Юзеры группы
@@ -33,12 +37,12 @@ export class Splitex {
   usersDeposits: Record<string, number> = {};
 
   transactions: ITransaction[] = []; // Итоговые переводы
-  manualTransactions: ITransaction[]; // Произведённые переводы, которые нужно учесть
+  manualTransactions: IManualTransaction[]; // Произведённые переводы, которые нужно учесть
 
   constructor(
     users: IUser[],
     expenses: IExpense[],
-    transactions?: ITransaction[]
+    transactions?: IManualTransaction[]
   ) {
     this.users = users;
     this.expenses = expenses;
