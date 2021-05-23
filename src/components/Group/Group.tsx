@@ -2,12 +2,7 @@ import { ComponentPropsWithRef, useEffect, useState } from "react";
 import Header from "./Header";
 import firebase from "firebase/app";
 import Users from "./Users/Users";
-import {
-  IExpense,
-  IManualTransaction,
-  ITransaction,
-  IUser,
-} from "../../lib/splitex";
+import { IExpense, IManualTransaction, IUser } from "../../lib/splitex";
 import Transactions from "./Transactions/Transactions";
 import Expenses from "./Expenses/Expenses";
 
