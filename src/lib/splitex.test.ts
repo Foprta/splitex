@@ -1,4 +1,4 @@
-import { IExpense, Splitex, IUser } from "./splitex";
+import { IExpense, Splitex, IUser, ITransaction } from "./splitex";
 
 test("should be created", () => {
   // Arrange
@@ -193,6 +193,39 @@ describe("should calculate users deposits", () => {
       user5: 1000,
     });
   });
+
+  test("case #5", () => {
+    // Arrange
+    const splitex = new Splitex(
+      [
+        { id: "user1" },
+        { id: "user2" },
+        { id: "user3" },
+        { id: "user4" },
+        { id: "user5" },
+      ] as IUser[],
+      [
+        { amount: 5000, userId: "user1" },
+        { amount: 2000, userId: "user1" },
+        { amount: 1000, userId: "user5" },
+        { amount: 500, userId: "user5" },
+        { amount: 600, userId: "user5" },
+        { amount: 900, userId: "user5" },
+      ] as IExpense[],
+      [
+        { fromUserId: "user2", toUserId: "user5", amount: 1000 },
+      ] as ITransaction[]
+    );
+
+    // Assert
+    expect(splitex.usersDeposits).toEqual({
+      user1: 5000,
+      user2: -1000,
+      user3: -2000,
+      user4: -2000,
+      user5: 0,
+    });
+  });
 });
 
 describe("should map deposits into sorted filtered array", () => {
@@ -324,5 +357,67 @@ describe("should calculate transactions", () => {
       { fromUserId: "user3", toUserId: "user2", amount: 550 },
       { fromUserId: "user3", toUserId: "user1", amount: 400 },
     ]);
+  });
+
+  describe("with manual transactions", () => {
+    test("case #1", () => {
+      // Arrange
+      const splitex = new Splitex(
+        [
+          { id: "user1" },
+          { id: "user2" },
+          { id: "user3" },
+          { id: "user4" },
+          { id: "user5" },
+          { id: "user6" },
+        ] as IUser[],
+        [
+          { amount: 6000, userId: "user1" },
+          { amount: 2000, userId: "user2" },
+          { amount: 500, userId: "user3" },
+          { amount: 200, userId: "user6" },
+        ] as IExpense[],
+        [{ fromUserId: "user6", toUserId: "user1", amount: 500 }]
+      );
+
+      // Assert
+      expect(splitex.transactions).toEqual([
+        { fromUserId: "user5", toUserId: "user1", amount: 1450 },
+        { fromUserId: "user4", toUserId: "user1", amount: 1450 },
+        { fromUserId: "user3", toUserId: "user1", amount: 950 },
+        { fromUserId: "user6", toUserId: "user2", amount: 550 },
+        { fromUserId: "user6", toUserId: "user1", amount: 200 },
+      ]);
+    });
+
+    test("case #2", () => {
+      // Arrange
+      const splitex = new Splitex(
+        [
+          { id: "user1" },
+          { id: "user2" },
+          { id: "user3" },
+          { id: "user4" },
+          { id: "user5" },
+          { id: "user6" },
+        ] as IUser[],
+        [
+          { amount: 6000, userId: "user1" },
+          { amount: 2000, userId: "user2" },
+          { amount: 500, userId: "user3" },
+          { amount: 200, userId: "user6" },
+        ] as IExpense[],
+        [
+          { fromUserId: "user5", toUserId: "user1", amount: 1450 },
+          { fromUserId: "user4", toUserId: "user1", amount: 1450 },
+          { fromUserId: "user6", toUserId: "user1", amount: 1250 },
+          { fromUserId: "user3", toUserId: "user2", amount: 550 },
+          { fromUserId: "user3", toUserId: "user1", amount: 400 },
+        ]
+      );
+
+      // Assert
+      expect(splitex.transactions).toEqual([]);
+    });
   });
 });
