@@ -2,7 +2,7 @@ name: Test and Deploy
 on:
   push:
     branches: [ master ]
-  workflow_dispatch:
+  pull_request:
 
 jobs:
   testAndDeploy:
@@ -23,6 +23,7 @@ jobs:
         run: npm run build
     
       - name: SSH Deploy
+        if: ${{ github.event_name != 'pull_request' }}
         uses: easingthemes/ssh-deploy@v2
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}

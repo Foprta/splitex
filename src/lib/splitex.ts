@@ -6,6 +6,7 @@ export interface IFirestoreEntity {
 
 export interface IUser extends IFirestoreEntity {
   name: string;
+  proportion: number;
 }
 
 export interface IExpense extends IFirestoreEntity {
@@ -22,11 +23,11 @@ export interface ITransaction {
 export type IManualTransaction = ITransaction & IFirestoreEntity;
 
 export class Splitex {
-  users: IUser[]; // Юзеры группы
-  expenses: IExpense[]; // Траты группы
+  users: IUser[] = []; // Юзеры группы
+  expenses: IExpense[] = []; // Траты группы
 
-  totalCost: number; // Сколько всего было потрачено
-  averageExpense: number; // Траты на одного человека
+  totalCost = 0; // Сколько всего было потрачено
+  averageExpense = 0; // Траты на одного человека
 
   /**
    * "Депозиты" участников.
@@ -37,19 +38,26 @@ export class Splitex {
   usersDeposits: Record<string, number> = {};
 
   transactions: ITransaction[] = []; // Итоговые переводы
-  manualTransactions: IManualTransaction[]; // Произведённые переводы, которые нужно учесть
+  manualTransactions: IManualTransaction[] = []; // Произведённые переводы, которые нужно учесть
 
   constructor(
     users: IUser[],
     expenses: IExpense[],
     transactions?: IManualTransaction[]
   ) {
+    if (users.length < 1 || expenses.length < 1) {
+      return;
+    }
+
     this.users = users;
     this.expenses = expenses;
     this.manualTransactions = transactions || [];
 
     this.totalCost = expenses.reduce((acc, { amount }) => acc + amount, 0);
-    this.averageExpense = this.totalCost / users.length;
+
+    this.averageExpense =
+      this.totalCost /
+      users.reduce((acc, { proportion }) => acc + proportion, 0);
 
     this.calculateUsersDeposits();
 
@@ -88,9 +96,10 @@ export class Splitex {
 
   private calculateUsersDeposits(): void {
     this.users.forEach(
-      ({ id }) =>
+      ({ id, proportion }) =>
         (this.usersDeposits[id] =
-          this.calculateTotalUserExpenses(id) - this.averageExpense)
+          this.calculateTotalUserExpenses(id) -
+          this.averageExpense * proportion)
     );
 
     this.manualTransactions.forEach(({ fromUserId, toUserId, amount }) => {

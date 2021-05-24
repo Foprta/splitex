@@ -14,6 +14,7 @@ interface Props {
 
 function EditUser({ groupId, user, isOpen, setIsOpen }: Props) {
   const [name, setName] = useState(user.name);
+  const [proportion, setProportion] = useState(user.proportion);
 
   const editUser = () => {
     firebase
@@ -22,7 +23,7 @@ function EditUser({ groupId, user, isOpen, setIsOpen }: Props) {
       .doc(groupId)
       .collection("users")
       .doc(user.id)
-      .update({ name })
+      .update({ name, proportion })
       .then(() => setIsOpen(false))
       .catch(console.error);
   };
@@ -70,6 +71,14 @@ function EditUser({ groupId, user, isOpen, setIsOpen }: Props) {
           placeholder="Имя участника"
           value={name}
           onChange={(e: any) => setName(e.currentTarget.value)}
+        />
+
+        <Input
+          className="my-2"
+          placeholder="Пропорция"
+          value={proportion}
+          type="number"
+          onChange={(e: any) => setProportion(parseInt(e.currentTarget.value))}
         />
 
         <div className="text-red-500 mb-2">

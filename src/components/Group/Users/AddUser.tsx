@@ -13,7 +13,7 @@ function AddUser({ groupId }: ComponentProps<any>) {
       .collection("groups")
       .doc(groupId)
       .collection("users")
-      .add({ name })
+      .add({ name, proportion: 1 })
       .then(() => setName(""))
       .catch(console.error);
 
