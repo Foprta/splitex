@@ -8,48 +8,18 @@ import Header from "./Header";
 import Transactions from "./Transactions/Transactions";
 import Users from "./Users/Users";
 import Expenses from "./Expenses/Expenses";
-
-//
-//
-//   return users;
-// }
-//
-// function useTransactions(groupId: string): IManualTransaction[] {
-//   const [transactions, setTransactions] = useState<any>([]);
-//
-//   useEffect(() => {
-//     const unsub = firebase
-//       .firestore()
-//       .collection("groups")
-//       .doc(groupId)
-//       .collection("transactions")
-//       .onSnapshot((snapshot) => {
-//         if (snapshot.docs.length) {
-//           const transactions = snapshot.docs.map((doc) => ({
-//             id: doc.id,
-//             ...doc.data(),
-//           }));
-//
-//           setTransactions(transactions);
-//         } else {
-//           setTransactions([]);
-//         }
-//       });
-//     return () => unsub();
-//   }, [groupId]);
-//
-//   return transactions;
-// }
+import { ExpensesSettingsStore } from "../../stores/expenses-settings.store";
 
 interface Props {
   groupsStore?: GroupsStore;
   usersStore?: UsersStore;
   expensesStore?: ExpensesStore;
   manualTransactionsStore?: ManualTransactionsStore;
+  expensesSettingsStore?: ExpensesSettingsStore;
   match: any;
 }
 
-@inject("groupsStore", "usersStore", "expensesStore", "manualTransactionsStore")
+@inject("groupsStore", "usersStore", "expensesStore", "manualTransactionsStore", "expensesSettingsStore")
 @observer
 class Group extends React.Component<Props> {
   componentDidMount() {
@@ -59,6 +29,7 @@ class Group extends React.Component<Props> {
     this.props.usersStore.usersSub(groupId);
     this.props.expensesStore.expensesSub(groupId);
     this.props.manualTransactionsStore.manualTransactionsSub(groupId);
+    this.props.expensesSettingsStore.expensesSettingsSub(groupId);
   }
 
   componentWillUnmount() {
@@ -66,10 +37,11 @@ class Group extends React.Component<Props> {
     this.props.usersStore.resetUsers();
     this.props.expensesStore.resetExpenses();
     this.props.manualTransactionsStore.resetManualTransactions();
+    this.props.expensesSettingsStore.resetExpensesSettings();
   }
 
   render() {
-    const { groupsStore, usersStore, expensesStore, manualTransactionsStore } = this.props;
+    const { groupsStore, usersStore, expensesStore, manualTransactionsStore, expensesSettingsStore } = this.props;
 
     return (
       <div className="flex flex-col w-full">
@@ -80,6 +52,7 @@ class Group extends React.Component<Props> {
           users={usersStore.users}
           expenses={expensesStore.expenses}
           manualTransactions={manualTransactionsStore.manualTransactions}
+          expensesSettings={expensesSettingsStore.expensesSettings}
         />
         <div className="block-header">Траты участников</div>
         <Expenses
@@ -87,6 +60,7 @@ class Group extends React.Component<Props> {
           users={usersStore.users}
           expenses={expensesStore.expenses}
           manualTransactions={manualTransactionsStore.manualTransactions}
+          expensesSettings={expensesSettingsStore.expensesSettings}
         />
       </div>
     );

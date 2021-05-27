@@ -7,8 +7,9 @@ import groupsStore from "./stores/groups.store";
 import usersStore from "./stores/users.store";
 import expensesStore from "./stores/expenses.store";
 import manualTransactionsStore from "./stores/manual-transactions.store";
+import expensesSettingsStore from "./stores/expenses-settings.store";
 
-const stores = { groupsStore, usersStore, expensesStore, manualTransactionsStore };
+const stores = { groupsStore, usersStore, expensesStore, manualTransactionsStore, expensesSettingsStore };
 
 function App() {
   return (

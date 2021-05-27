@@ -1,4 +1,7 @@
-import { IExpense, IExpenseSettings, IManualTransaction, IUser, Splitex } from "./splitex";
+import { Splitex } from "./splitex";
+import { IManualTransaction } from "../stores/manual-transactions.store";
+import { IUser } from "../stores/users.store";
+import { IExpense, IExpenseSettings } from "../stores/expenses.store";
 
 test("should be created", () => {
   // Arrange

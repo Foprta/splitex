@@ -1,33 +1,8 @@
 import { first, isEmpty, last } from "lodash";
-
-export interface IFirestoreEntity {
-  id: string;
-}
-
-export interface IUser extends IFirestoreEntity {
-  name: string;
-  proportion: number;
-}
-
-export interface IExpenseSettings extends IFirestoreEntity {
-  expenseId: string;
-  userId: string;
-  proportion?: number;
-  personal?: number;
-}
-
-export interface IExpense extends IFirestoreEntity {
-  userId: string;
-  amount: number;
-}
-
-export interface ITransaction {
-  fromUserId: string;
-  toUserId: string;
-  amount: number;
-}
-
-export type IManualTransaction = ITransaction & IFirestoreEntity;
+import { IManualTransaction, ITransaction } from "../stores/manual-transactions.store";
+import { IExpense } from "../stores/expenses.store";
+import { IUser } from "../stores/users.store";
+import { IExpenseSettings } from "../stores/expenses-settings.store";
 
 export class Splitex {
   users: IUser[] = []; // Юзеры группы

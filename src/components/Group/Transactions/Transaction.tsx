@@ -1,9 +1,10 @@
 import Money from "../../UI/Money";
 import { useState } from "react";
 import EditTransaction from "./EditTransaction";
-import { IManualTransaction, IUser } from "../../../lib/splitex";
 import IconButton from "../../UI/IconButton";
 import { PencilAltIcon } from "@heroicons/react/outline";
+import { IManualTransaction } from "../../../stores/manual-transactions.store";
+import { IUser } from "../../../stores/users.store";
 
 interface Props {
   fromUser: string;
@@ -15,15 +16,7 @@ interface Props {
   users?: IUser[];
 }
 
-function Transaction({
-  fromUser,
-  toUser,
-  amount,
-  manual,
-  transaction,
-  groupId,
-  users,
-}: Props) {
+function Transaction({ fromUser, toUser, amount, manual, transaction, groupId, users }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -34,10 +27,7 @@ function Transaction({
 
       <div className="flex justify-between items-center">
         {groupId && transaction && users && (
-          <IconButton
-            onClick={() => setIsOpen(true)}
-            className="mr-2 text-yellow-500"
-          >
+          <IconButton onClick={() => setIsOpen(true)} className="mr-2 text-yellow-500">
             <PencilAltIcon className="w-6 h-6" />
           </IconButton>
         )}

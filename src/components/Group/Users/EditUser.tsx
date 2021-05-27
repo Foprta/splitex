@@ -2,8 +2,8 @@ import { Dialog } from "@headlessui/react";
 import firebase from "../../../config/firebase.config";
 import Input from "../../UI/Input";
 import { useState } from "react";
-import { IUser } from "../../../lib/splitex";
 import Button from "../../UI/Button";
+import { IUser } from "../../../stores/users.store";
 
 interface Props {
   groupId: string;
@@ -41,15 +41,7 @@ function EditUser({ groupId, user, isOpen, setIsOpen }: Props) {
         snapshot.docs.forEach((doc) => batch.delete(doc.ref));
         return batch.commit();
       })
-      .then(() =>
-        firebase
-          .firestore()
-          .collection("groups")
-          .doc(groupId)
-          .collection("users")
-          .doc(user.id)
-          .delete()
-      )
+      .then(() => firebase.firestore().collection("groups").doc(groupId).collection("users").doc(user.id).delete())
       .catch(console.error);
   };
 
@@ -81,9 +73,7 @@ function EditUser({ groupId, user, isOpen, setIsOpen }: Props) {
           onChange={(e: any) => setProportion(parseInt(e.currentTarget.value))}
         />
 
-        <div className="text-red-500 mb-2">
-          При удалении участника удалятся все его траты
-        </div>
+        <div className="text-red-500 mb-2">При удалении участника удалятся все его траты</div>
 
         <div className="float-right">
           <Button className="mr-2" onClick={() => setIsOpen(false)}>

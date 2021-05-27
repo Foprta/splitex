@@ -1,7 +1,11 @@
-import Store from "./_store";
+import Store, { IFirestoreEntity } from "./_store";
 import { action, makeObservable, observable } from "mobx";
-import { IUser } from "../lib/splitex";
 import firebase from "firebase/app";
+
+export interface IUser extends IFirestoreEntity {
+  name: string;
+  proportion: number;
+}
 
 class UsersStore extends Store {
   @observable users: IUser[] = [];

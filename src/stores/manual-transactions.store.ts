@@ -1,7 +1,14 @@
-import Store from "./_store";
+import Store, { IFirestoreEntity } from "./_store";
 import { action, makeObservable, observable } from "mobx";
-import { IManualTransaction } from "../lib/splitex";
 import firebase from "firebase/app";
+
+export interface ITransaction {
+  fromUserId: string;
+  toUserId: string;
+  amount: number;
+}
+
+export type IManualTransaction = ITransaction & IFirestoreEntity;
 
 class ManualTransactionsStore extends Store {
   @observable manualTransactions: IManualTransaction[] = [];

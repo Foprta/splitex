@@ -2,40 +2,42 @@ import Store, { IFirestoreEntity } from "./_store";
 import { action, makeObservable, observable } from "mobx";
 import firebase from "firebase/app";
 
-export interface IExpense extends IFirestoreEntity {
+export interface IExpenseSettings extends IFirestoreEntity {
+  expenseId: string;
   userId: string;
-  amount: number;
+  proportion?: number;
+  personal?: number;
 }
 
-class ExpensesStore extends Store {
-  @observable expenses: IExpense[] = [];
+class ExpensesSettingsStore extends Store {
+  @observable expensesSettings: IExpenseSettings[] = [];
 
-  private expensesUnsub = () => {};
+  private expensesSettingsUnsub = () => {};
 
   constructor() {
     super();
     makeObservable(this);
   }
 
-  @action resetExpenses(): void {
-    this.expensesUnsub();
-    this.expenses = [];
+  @action resetExpensesSettings(): void {
+    this.expensesSettingsUnsub();
+    this.expensesSettings = [];
   }
 
-  @action expensesSub = (id: string): void => {
-    this.expensesUnsub = firebase
+  @action expensesSettingsSub = (id: string): void => {
+    this.expensesSettingsUnsub = firebase
       .firestore()
       .collection("groups")
       .doc(id)
-      .collection("expenses")
+      .collection("expensesSettings")
       .onSnapshot((snapshot) => {
         if (snapshot.docs.length) {
-          this.expenses = snapshot.docs.map((doc) => ({
+          this.expensesSettings = snapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
-          })) as IExpense[];
+          })) as IExpenseSettings[];
         } else {
-          this.expenses = [];
+          this.expensesSettings = [];
         }
       });
   };
@@ -47,7 +49,7 @@ class ExpensesStore extends Store {
     firebase.firestore().collection("groups").doc(groupId).collection("expenses").doc(expenseId).delete();
 }
 
-const expensesStore = new ExpensesStore();
+const expensesSettingsStore = new ExpensesSettingsStore();
 
-export default expensesStore;
-export { ExpensesStore };
+export default expensesSettingsStore;
+export { ExpensesSettingsStore };
