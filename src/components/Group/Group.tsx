@@ -1,139 +1,96 @@
-import { ComponentPropsWithRef, useEffect, useState } from "react";
+import React from "react";
+import { inject, observer } from "mobx-react";
+import { GroupsStore } from "../../stores/groups.store";
+import { UsersStore } from "../../stores/users.store";
+import { ExpensesStore } from "../../stores/expenses.store";
+import { ManualTransactionsStore } from "../../stores/manual-transactions.store";
 import Header from "./Header";
-import firebase from "firebase/app";
-import Users from "./Users/Users";
-import { IExpense, IManualTransaction, IUser } from "../../lib/splitex";
 import Transactions from "./Transactions/Transactions";
+import Users from "./Users/Users";
 import Expenses from "./Expenses/Expenses";
 
-function useGroup(groupId: string): any {
-  const [group, setGroup] = useState<any>();
+//
+//
+//   return users;
+// }
+//
+// function useTransactions(groupId: string): IManualTransaction[] {
+//   const [transactions, setTransactions] = useState<any>([]);
+//
+//   useEffect(() => {
+//     const unsub = firebase
+//       .firestore()
+//       .collection("groups")
+//       .doc(groupId)
+//       .collection("transactions")
+//       .onSnapshot((snapshot) => {
+//         if (snapshot.docs.length) {
+//           const transactions = snapshot.docs.map((doc) => ({
+//             id: doc.id,
+//             ...doc.data(),
+//           }));
+//
+//           setTransactions(transactions);
+//         } else {
+//           setTransactions([]);
+//         }
+//       });
+//     return () => unsub();
+//   }, [groupId]);
+//
+//   return transactions;
+// }
 
-  useEffect(() => {
-    const unsub = firebase
-      .firestore()
-      .collection("groups")
-      .doc(groupId)
-      .onSnapshot((snapshot) => {
-        if (snapshot.exists) {
-          const group = { id: snapshot.id, ...snapshot.data() };
-
-          setGroup(group);
-        }
-      });
-    return () => unsub();
-  }, [groupId]);
-
-  return group;
+interface Props {
+  groupsStore?: GroupsStore;
+  usersStore?: UsersStore;
+  expensesStore?: ExpensesStore;
+  manualTransactionsStore?: ManualTransactionsStore;
+  match: any;
 }
 
-function useExpenses(groupId: string): IExpense[] {
-  const [expenses, setExpenses] = useState<any>([]);
+@inject("groupsStore", "usersStore", "expensesStore", "manualTransactionsStore")
+@observer
+class Group extends React.Component<Props> {
+  componentDidMount() {
+    const groupId = this.props.match.params.id;
 
-  useEffect(() => {
-    const unsub = firebase
-      .firestore()
-      .collection("groups")
-      .doc(groupId)
-      .collection("expenses")
-      .onSnapshot((snapshot) => {
-        if (snapshot.docs.length) {
-          const expenses = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
+    this.props.groupsStore.groupSub(groupId);
+    this.props.usersStore.usersSub(groupId);
+    this.props.expensesStore.expensesSub(groupId);
+    this.props.manualTransactionsStore.manualTransactionsSub(groupId);
+  }
 
-          setExpenses(expenses);
-        } else {
-          setExpenses([]);
-        }
-      });
-    return () => unsub();
-  }, [groupId]);
+  componentWillUnmount() {
+    this.props.groupsStore.resetGroup();
+    this.props.usersStore.resetUsers();
+    this.props.expensesStore.resetExpenses();
+    this.props.manualTransactionsStore.resetManualTransactions();
+  }
 
-  return expenses;
-}
+  render() {
+    const { groupsStore, usersStore, expensesStore, manualTransactionsStore } = this.props;
 
-function useUsers(groupId: string): IUser[] {
-  const [users, setUsers] = useState<any>([]);
-
-  useEffect(() => {
-    const unsub = firebase
-      .firestore()
-      .collection("groups")
-      .doc(groupId)
-      .collection("users")
-      .onSnapshot((snapshot) => {
-        if (snapshot.docs.length) {
-          const users = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-
-          setUsers(users);
-        } else {
-          setUsers([]);
-        }
-      });
-    return () => unsub();
-  }, [groupId]);
-
-  return users;
-}
-
-function useTransactions(groupId: string): IManualTransaction[] {
-  const [transactions, setTransactions] = useState<any>([]);
-
-  useEffect(() => {
-    const unsub = firebase
-      .firestore()
-      .collection("groups")
-      .doc(groupId)
-      .collection("transactions")
-      .onSnapshot((snapshot) => {
-        if (snapshot.docs.length) {
-          const transactions = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-
-          setTransactions(transactions);
-        } else {
-          setTransactions([]);
-        }
-      });
-    return () => unsub();
-  }, [groupId]);
-
-  return transactions;
-}
-
-function Group({ match }: ComponentPropsWithRef<any>) {
-  const groupId = match.params.id;
-  const group = useGroup(groupId);
-  const expenses = useExpenses(groupId);
-  const users = useUsers(groupId);
-  const manualTransactions = useTransactions(groupId);
-
-  return (
-    <div className="flex flex-col w-full">
-      <Header group={group} expenses={expenses} />
-      <Users groupId={groupId} users={users} expenses={expenses} />
-      <div className="block-header">Необходимые переводы</div>
-      <Transactions
-        users={users}
-        expenses={expenses}
-        manualTransactions={manualTransactions}
-      />
-      <div className="block-header">Траты участников</div>
-      <Expenses
-        groupId={groupId}
-        users={users}
-        expenses={expenses}
-        manualTransactions={manualTransactions}
-      />
-    </div>
-  );
+    return (
+      <div className="flex flex-col w-full">
+        <Header group={groupsStore.group} expenses={expensesStore.expenses} />
+        <Users groupId={groupsStore.group?.id} users={usersStore.users} expenses={expensesStore.expenses} />
+        <div className="block-header">Необходимые переводы</div>
+        <Transactions
+          users={usersStore.users}
+          expenses={expensesStore.expenses}
+          manualTransactions={manualTransactionsStore.manualTransactions}
+        />
+        <div className="block-header">Траты участников</div>
+        <Expenses
+          groupId={groupsStore.group?.id}
+          users={usersStore.users}
+          expenses={expensesStore.expenses}
+          manualTransactions={manualTransactionsStore.manualTransactions}
+        />
+      </div>
+    );
+  }
 }
 
 export default Group;

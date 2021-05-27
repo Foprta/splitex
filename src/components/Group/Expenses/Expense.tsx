@@ -11,7 +11,7 @@ interface Props {
   userName: string;
 }
 
-function Expenses({ groupId, expense, userName }: Props) {
+function Expense({ groupId, expense, userName }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -20,26 +20,17 @@ function Expenses({ groupId, expense, userName }: Props) {
         <b>{userName}</b> потратил
       </span>
       <div className="flex justify-between items-center">
-        <IconButton
-          onClick={() => setIsOpen(true)}
-          className="mr-2 text-yellow-500"
-        >
+        <IconButton onClick={() => setIsOpen(true)} className="mr-2 text-yellow-500">
           <PencilAltIcon className="w-6 h-6" />
         </IconButton>
         <Money amount={expense.amount} />
       </div>
 
       {isOpen && (
-        <EditExpense
-          groupId={groupId}
-          expense={expense}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          userName={userName}
-        />
+        <EditExpense groupId={groupId} expense={expense} isOpen={isOpen} setIsOpen={setIsOpen} userName={userName} />
       )}
     </div>
   );
 }
 
-export default Expenses;
+export default Expense;
