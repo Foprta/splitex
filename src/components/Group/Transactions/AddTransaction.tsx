@@ -3,7 +3,7 @@ import firebase from "../../../config/firebase.config";
 import Input from "../../UI/Input";
 import { useState } from "react";
 import Button from "../../UI/Button";
-import { IUser } from "../../../lib/splitex";
+import { IUser } from "../../../stores/users.store";
 
 interface Props {
   users: IUser[];
@@ -22,7 +22,7 @@ function AddTransaction({ groupId, user, isOpen, setIsOpen, users }: Props) {
       .firestore()
       .collection("groups")
       .doc(groupId)
-      .collection("transactions")
+      .collection("manualTransactions")
       .add({ amount, fromUserId: user.id, toUserId })
       .then(() => setIsOpen(false))
       .catch(console.error);
@@ -50,10 +50,7 @@ function AddTransaction({ groupId, user, isOpen, setIsOpen, users }: Props) {
             onChange={(e: any) => setAmount(parseFloat(e.currentTarget.value))}
           />
 
-          <select
-            placeholder="Кому перевод"
-            onChange={(e) => setToUserId(e.target.value)}
-          >
+          <select placeholder="Кому перевод" onChange={(e) => setToUserId(e.target.value)}>
             {users.map(({ name, id }) => (
               <option key={id} value={id}>
                 {name}

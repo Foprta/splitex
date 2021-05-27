@@ -1,27 +1,48 @@
 name: Test and Deploy
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
 
 jobs:
-  testAndDeploy:
+  testAndBuild:
+    name: Test and Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.5
-        
+
       - name: Istall deps
         run: npm install
 
       - name: Run test
         run: npm run test
-        
+
       - name: Run build
         run: npm run build
-    
+
+      - name: Cache build
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-folder
+          path: build
+
+  deploy:
+    if: ${{ github.event_name != 'pull_request' }}
+    needs: [testAndBuild]
+    name: Deploy on Server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Restore cache
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+
       - name: SSH Deploy
         if: ${{ github.event_name != 'pull_request' }}
         uses: easingthemes/ssh-deploy@v2

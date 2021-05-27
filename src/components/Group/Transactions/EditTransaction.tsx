@@ -2,8 +2,9 @@ import { Dialog } from "@headlessui/react";
 import firebase from "../../../config/firebase.config";
 import Input from "../../UI/Input";
 import { useState } from "react";
-import { IManualTransaction, IUser } from "../../../lib/splitex";
 import Button from "../../UI/Button";
+import { IManualTransaction } from "../../../stores/manual-transactions.store";
+import { IUser } from "../../../stores/users.store";
 
 interface Props {
   groupId: string;
@@ -14,25 +15,16 @@ interface Props {
   setIsOpen: (isOpen: boolean) => void;
 }
 
-function EditTransaction({
-  groupId,
-  transaction,
-  isOpen,
-  setIsOpen,
-  userName,
-  users,
-}: Props) {
+function EditTransaction({ groupId, transaction, isOpen, setIsOpen, userName, users }: Props) {
   const [amount, setAmount] = useState(transaction.amount);
-  const [toUserId, setToUserId] = useState<string | undefined>(
-    transaction.toUserId
-  );
+  const [toUserId, setToUserId] = useState<string | undefined>(transaction.toUserId);
 
   const editTransaction = () => {
     firebase
       .firestore()
       .collection("groups")
       .doc(groupId)
-      .collection("transactions")
+      .collection("manualTransactions")
       .doc(transaction.id)
       .update({ amount, toUserId })
       .then(() => setIsOpen(false))
@@ -44,7 +36,7 @@ function EditTransaction({
       .firestore()
       .collection("groups")
       .doc(groupId)
-      .collection("transactions")
+      .collection("manualTransactions")
       .doc(transaction.id)
       .delete()
       .catch(console.error);
@@ -72,10 +64,7 @@ function EditTransaction({
             onChange={(e: any) => setAmount(parseFloat(e.currentTarget.value))}
           />
 
-          <select
-            placeholder="Кому перевод"
-            onChange={(e) => setToUserId(e.target.value)}
-          >
+          <select placeholder="Кому перевод" onChange={(e) => setToUserId(e.target.value)}>
             {users.map(({ name, id }) => (
               <option selected={id === toUserId} key={id} value={id}>
                 {name}
@@ -88,10 +77,7 @@ function EditTransaction({
           <Button className="mr-2" onClick={() => setIsOpen(false)}>
             Отмена
           </Button>
-          <Button
-            className="mr-2 bg-red-400 text-white"
-            onClick={deleteTransaction}
-          >
+          <Button className="mr-2 bg-red-400 text-white" onClick={deleteTransaction}>
             Удалить
           </Button>
           <Button className="bg-green-400" onClick={editTransaction}>

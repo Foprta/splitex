@@ -1,4 +1,4 @@
-import { IUser } from "../lib/splitex";
+import { IUser } from "../stores/users.store";
 
 export function createUsersMap(users: IUser[]): Record<string, string> {
   const result: Record<string, string> = {};

@@ -1,67 +1,73 @@
-import { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import firebase from "../config/firebase.config";
 import Input from "./UI/Input";
 import IconButton from "./UI/IconButton";
 import { UserGroupIcon } from "@heroicons/react/solid";
+import { GroupsStore } from "../stores/groups.store";
+import { inject, observer } from "mobx-react";
 
-function useGroups(): any {
-  const [groups, setGroups] = useState<any>([]);
-
-  useEffect(() => {
-    const unsub = firebase
-      .firestore()
-      .collection("groups")
-      .onSnapshot((snapshot) => {
-        const newGroups = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setGroups(newGroups);
-      });
-
-    return () => unsub();
-  }, []);
-
-  return groups;
+interface Props {
+  groupsStore?: GroupsStore;
 }
 
-function Landing() {
-  const [name, setName] = useState("");
-  const groups = useGroups();
+interface State {
+  name: string;
+}
 
-  const addGroup = () =>
-    firebase
-      .firestore()
-      .collection("groups")
-      .add({ name })
-      .then(() => setName(""))
+@inject("groupsStore")
+@observer
+class Landing extends React.Component<Props, State> {
+  groupsUnsub: () => void;
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: "",
+    };
+  }
+
+  componentDidMount() {
+    this.groupsUnsub = this.props.groupsStore.groupsSub();
+  }
+
+  componentWillUnmount() {
+    this.groupsUnsub();
+  }
+
+  addGroup = () =>
+    this.props.groupsStore
+      .addGroup(this.state.name)
+      .then(() => this.setState({ name: "" }))
       .catch(console.error);
 
-  return (
-    <div className="flex flex-col w-full">
-      <div className="divide-y-1 divide-black mb-4">
-        {groups.map(({ id, name }: any) => (
-          <Link className="block py-1.5" key={id} to={id}>
-            {name}
-          </Link>
-        ))}
-      </div>
+  render() {
+    const { groups } = this.props.groupsStore;
 
-      <div className="flex">
-        <Input
-          placeholder="Добавьте группу"
-          value={name}
-          min={3}
-          onChange={(e: any) => setName(e.currentTarget.value)}
-        />
-        <IconButton className="ml-2 text-green-500" onClick={addGroup}>
-          <UserGroupIcon className="w-6 h-6" />
-        </IconButton>
+    return (
+      <div className="flex flex-col w-full">
+        <div className="divide-y-1 divide-black mb-4">
+          {groups.map(({ id, name }: any) => (
+            <Link className="block py-1.5" key={id} to={id}>
+              {name}
+            </Link>
+          ))}
+        </div>
+
+        <div className="flex">
+          <Input
+            placeholder="Добавьте группу"
+            value={this.state.name}
+            min={3}
+            onChange={(e: any) => this.setState({ name: e.currentTarget.value })}
+          />
+          <IconButton className="ml-2 text-green-500" onClick={this.addGroup}>
+            <UserGroupIcon className="w-6 h-6" />
+          </IconButton>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default Landing;

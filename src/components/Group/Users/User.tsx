@@ -1,4 +1,3 @@
-import { IExpense, IUser } from "../../../lib/splitex";
 import Money from "../../UI/Money";
 import IconButton from "../../UI/IconButton";
 import { CashIcon, PencilAltIcon } from "@heroicons/react/outline";
@@ -6,6 +5,8 @@ import { useState } from "react";
 import AddExpense from "../Expenses/AddExpense";
 import EditUser from "./EditUser";
 import AddTransaction from "../Transactions/AddTransaction";
+import { IUser } from "../../../stores/users.store";
+import { IExpense } from "../../../stores/expenses.store";
 
 interface Props {
   user: IUser;
@@ -25,25 +26,16 @@ function User({ user, groupId, expenses, users }: Props) {
     <div className="flex justify-between items-center py-1.5">
       <div className="flex items-center">
         <span>{user.name}</span>
-        <IconButton
-          onClick={() => setIsEditUserOpen(true)}
-          className="ml-2 text-yellow-500"
-        >
+        <IconButton onClick={() => setIsEditUserOpen(true)} className="ml-2 text-yellow-500">
           <PencilAltIcon className="w-6 h-6" />
         </IconButton>
       </div>
 
       <div className="flex items-center">
-        <IconButton
-          onClick={() => setIsAddTransactionOpen(true)}
-          className="text-blue-500 mr-2"
-        >
+        <IconButton onClick={() => setIsAddTransactionOpen(true)} className="text-blue-500 mr-2">
           <CashIcon className="w-6 h-6" />
         </IconButton>
-        <IconButton
-          onClick={() => setIsAddExpenseOpen(true)}
-          className="text-red-500 mr-2"
-        >
+        <IconButton onClick={() => setIsAddExpenseOpen(true)} className="text-red-500 mr-2">
           <CashIcon className="w-6 h-6" />
         </IconButton>
         <Money amount={totalExpenses} />
@@ -60,21 +52,11 @@ function User({ user, groupId, expenses, users }: Props) {
       )}
 
       {isEditUserOpen && (
-        <EditUser
-          groupId={groupId}
-          user={user}
-          isOpen={isEditUserOpen}
-          setIsOpen={setIsEditUserOpen}
-        />
+        <EditUser groupId={groupId} user={user} isOpen={isEditUserOpen} setIsOpen={setIsEditUserOpen} />
       )}
 
       {isAddExpenseOpen && (
-        <AddExpense
-          user={user}
-          groupId={groupId}
-          isOpen={isAddExpenseOpen}
-          setIsOpen={setIsAddExpenseOpen}
-        />
+        <AddExpense user={user} groupId={groupId} isOpen={isAddExpenseOpen} setIsOpen={setIsAddExpenseOpen} />
       )}
     </div>
   );

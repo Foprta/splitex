@@ -1,6 +1,7 @@
-import { IExpense, IUser } from "../../../lib/splitex";
 import AddUser from "./AddUser";
 import User from "./User";
+import { IUser } from "../../../stores/users.store";
+import { IExpense } from "../../../stores/expenses.store";
 
 interface Props {
   users: IUser[];
@@ -13,19 +14,9 @@ function Users({ users, groupId, expenses }: Props) {
     <div>
       <div className="divide-y-1 divide-black">
         {users.map((user) => {
-          const userExpenses = expenses.filter(
-            ({ userId }) => userId === user.id
-          );
+          const userExpenses = expenses.filter(({ userId }) => userId === user.id);
 
-          return (
-            <User
-              key={user.id}
-              user={user}
-              groupId={groupId}
-              expenses={userExpenses}
-              users={users}
-            />
-          );
+          return <User key={user.id} user={user} groupId={groupId} expenses={userExpenses} users={users} />;
         })}
       </div>
 
