@@ -1,9 +1,10 @@
 import { Dialog } from "@headlessui/react";
-import Input from "../../UI/Input";
-import Button from "../../UI/Button";
-import { IExpense } from "../../../stores/expenses.store";
+import Input from "../UI/Input";
+import Button from "../UI/Button";
+import { IExpense } from "../../stores/expenses.store";
 import React, { useState } from "react";
-import { IUser } from "../../../stores/users.store";
+import { IUser } from "../../stores/users.store";
+import UserName from "../UI/UserName";
 
 interface Props {
   userName: string;
@@ -29,7 +30,7 @@ function EditExpense({ userName, expense, setIsOpen, onEdit, onRemove, users, ma
 
       <div className="inline-block w-full max-w-md p-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
         <Dialog.Title>
-          Трата <b>{userName}</b>
+          Трата <UserName userName={userName} />
         </Dialog.Title>
 
         <Input

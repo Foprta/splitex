@@ -1,7 +1,7 @@
 import AddUser from "./AddUser";
 import User from "./User";
-import { IUser } from "../../../stores/users.store";
-import { IExpense } from "../../../stores/expenses.store";
+import { IUser } from "../../stores/users.store";
+import { IExpense } from "../../stores/expenses.store";
 
 interface Props {
   users: IUser[];

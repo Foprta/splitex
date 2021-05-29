@@ -9,6 +9,7 @@ export interface IUser extends IFirestoreEntity {
 
 class UsersStore extends Store {
   @observable users: IUser[] = [];
+  @observable usersMap: Record<string, string> = {};
 
   private usersUnsub = () => {};
 
@@ -29,11 +30,15 @@ class UsersStore extends Store {
       .doc(id)
       .collection("users")
       .onSnapshot((snapshot) => {
+        this.usersMap = {};
+
         if (snapshot.docs.length) {
           this.users = snapshot.docs.map((doc) => ({
             id: doc.id,
             ...doc.data(),
           })) as IUser[];
+
+          this.users.forEach((user) => (this.usersMap[user.id] = user.name));
         } else {
           this.users = [];
         }

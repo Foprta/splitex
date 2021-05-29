@@ -1,12 +1,11 @@
-import Money from "../../UI/Money";
-import IconButton from "../../UI/IconButton";
-import { PencilAltIcon } from "@heroicons/react/outline";
+import Money from "../UI/Money";
 import { useState } from "react";
 import EditExpense from "./EditExpense";
-import expensesStore, { IExpense } from "../../../stores/expenses.store";
-import { IUser } from "../../../stores/users.store";
-import firebase from "../../../config/firebase.config";
-import { IExpenseSettings } from "../../../stores/expenses-settings.store";
+import expensesStore, { IExpense } from "../../stores/expenses.store";
+import { IUser } from "../../stores/users.store";
+import firebase from "../../config/firebase.config";
+import { IExpenseSettings } from "../../stores/expenses-settings.store";
+import UserName from "../UI/UserName";
 
 interface Props {
   groupId: string;
@@ -61,15 +60,11 @@ function Expense({ groupId, expense, userName, users, expenseSettings }: Props) 
 
   return (
     <div className="flex justify-between items-center py-1.5">
-      <span>
-        <b>{userName}</b> потратил
-      </span>
-      <div className="flex justify-between items-center">
-        <IconButton onClick={() => setIsEditorOpen(true)} className="mr-2 text-yellow-500">
-          <PencilAltIcon className="w-6 h-6" />
-        </IconButton>
+      <UserName userName={userName} />
+
+      <button className="clickable text-red-600" onClick={() => setIsEditorOpen(true)}>
         <Money amount={expense.amount} />
-      </div>
+      </button>
 
       {isEditorOpen && (
         <EditExpense

@@ -5,9 +5,9 @@ import { UsersStore } from "../../stores/users.store";
 import { ExpensesStore } from "../../stores/expenses.store";
 import { ManualTransactionsStore } from "../../stores/manual-transactions.store";
 import Header from "./Header";
-import Transactions from "./Transactions/Transactions";
-import Users from "./Users/Users";
-import Expenses from "./Expenses/Expenses";
+import Transactions from "../Transactions/Transactions";
+import Users from "../Users/Users";
+import Expenses from "../Expenses/Expenses";
 import { ExpensesSettingsStore } from "../../stores/expenses-settings.store";
 
 interface Props {

@@ -1,10 +1,10 @@
-import { Splitex } from "../../../lib/splitex";
-import { createUsersMap } from "../../../utils/utils";
+import { Splitex } from "../../lib/splitex";
+import { createUsersMap } from "../../utils/utils";
 import Transaction from "./Transaction";
-import { IManualTransaction } from "../../../stores/manual-transactions.store";
-import { IUser } from "../../../stores/users.store";
-import { IExpense } from "../../../stores/expenses.store";
-import { IExpenseSettings } from "../../../stores/expenses-settings.store";
+import { IManualTransaction } from "../../stores/manual-transactions.store";
+import { IUser } from "../../stores/users.store";
+import { IExpense } from "../../stores/expenses.store";
+import { IExpenseSettings } from "../../stores/expenses-settings.store";
 
 interface Props {
   users: IUser[];

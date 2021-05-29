@@ -1,8 +1,8 @@
 import { ComponentProps, useState } from "react";
-import firebase from "../../../config/firebase.config";
+import firebase from "../../config/firebase.config";
 import { UserAddIcon } from "@heroicons/react/outline";
-import IconButton from "../../UI/IconButton";
-import Input from "../../UI/Input";
+import IconButton from "../UI/IconButton";
+import Input from "../UI/Input";
 
 function AddUser({ groupId }: ComponentProps<any>) {
   const [name, setName] = useState<string>("");

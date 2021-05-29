@@ -1,10 +1,10 @@
-import { createUsersMap } from "../../../utils/utils";
+import { createUsersMap } from "../../utils/utils";
 import Expense from "./Expense";
 import Transaction from "../Transactions/Transaction";
-import { IManualTransaction } from "../../../stores/manual-transactions.store";
-import { IUser } from "../../../stores/users.store";
-import { IExpense } from "../../../stores/expenses.store";
-import { IExpenseSettings } from "../../../stores/expenses-settings.store";
+import { IManualTransaction } from "../../stores/manual-transactions.store";
+import { IUser } from "../../stores/users.store";
+import { IExpense } from "../../stores/expenses.store";
+import { IExpenseSettings } from "../../stores/expenses-settings.store";
 
 interface Props {
   groupId: string;
@@ -18,7 +18,7 @@ function Expenses({ groupId, users, expenses, manualTransactions, expensesSettin
   const usersMap = createUsersMap(users);
 
   return (
-    <div className="flex flex-col divide-y-1 divide-black">
+    <div className="flex flex-col divide-y-1 divide-gray-300">
       {expenses.map((expense) => {
         const expenseSettings = expensesSettings.filter(({ expenseId }) => expenseId === expense.id);
 
