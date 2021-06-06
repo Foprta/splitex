@@ -19,7 +19,7 @@ function Transactions({ users, expenses, manualTransactions, expensesSettings }:
   const splitex = new Splitex(users, expenses, manualTransactions, expensesSettings);
 
   return (
-    <div className="divide-y-1 divide-black">
+    <div className="divide-y-1 divide-gray-300">
       {splitex.transactions.map((transaction, i) => (
         <Transaction
           key={i}

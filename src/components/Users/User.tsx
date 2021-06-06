@@ -22,7 +22,7 @@ function User({ user, groupId, expenses, users }: Props) {
   return (
     <div className="flex justify-between items-center py-1.5">
       <button className="clickable" onClick={() => setEditUserOpened(true)}>
-        <UserName userName={user.name} />
+        <UserName userName={user.name || "username"} />
       </button>
 
       <button className="clickable" onClick={() => setNewExpenseOpened(true)}>

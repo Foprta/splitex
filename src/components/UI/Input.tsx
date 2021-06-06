@@ -1,16 +1,10 @@
 import { ComponentProps } from "react";
 
-function Input({
-  value,
-  onChange,
-  placeholder,
-  type,
-  className,
-}: ComponentProps<any>) {
+function Input({ value, onChange, placeholder, type, className }: ComponentProps<any>) {
   return (
     <input
       className={
-        "duration-75 w-full bg-transparent border-1 rounded-xl px-2 border-gray-400 outline-none focus:border-blue-400 focus:bg-blue-50 focus:bg-opacity-30 " +
+        "duration-150 bg-blue-50 w-full border-b-1 border-gray-300 focus:outline-none focus:bg-blue-100 focus:border-blue-300 " +
         className
       }
       placeholder={placeholder}

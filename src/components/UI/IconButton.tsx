@@ -10,8 +10,9 @@ function IconButton({ className, onClick, children }: Props) {
   return (
     <button
       className={
-        "bg-transparent hover:bg-gray-100 border-1 border-gray-400 rounded-xl focus:outline-none focus-within:outline-none p-1 text-black " +
-        className
+        `duration-150 border-1 border-gray-300 p-1 text-black 
+        hover:bg-gray-100 
+        focus:outline-none focus:border-blue-300 focus:bg-blue-100 ` + className
       }
       onClick={onClick}
     >

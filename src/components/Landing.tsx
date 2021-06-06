@@ -5,6 +5,7 @@ import IconButton from "./UI/IconButton";
 import { UserGroupIcon } from "@heroicons/react/solid";
 import { GroupsStore } from "../stores/groups.store";
 import { inject, observer } from "mobx-react";
+import GroupName from "./UI/GroupName";
 
 interface Props {
   groupsStore?: GroupsStore;
@@ -46,15 +47,17 @@ class Landing extends React.Component<Props, State> {
 
     return (
       <div className="flex flex-col w-full">
-        <div className="divide-y-1 divide-black mb-4">
+        <div className="flex flex-col divide-y-1 divide-gray-300">
           {groups.map(({ id, name }: any) => (
-            <Link className="block py-1.5" key={id} to={id}>
-              {name}
-            </Link>
+            <div className="py-1.5 first:pt-0">
+              <Link className="clickable" key={id} to={id}>
+                <GroupName groupName={name} />
+              </Link>
+            </div>
           ))}
         </div>
 
-        <div className="flex">
+        <div className="flex mt-3">
           <Input
             placeholder="Добавьте группу"
             value={this.state.name}

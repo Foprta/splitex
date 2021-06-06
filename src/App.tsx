@@ -16,7 +16,7 @@ function App() {
     <Provider {...stores}>
       <BrowserRouter>
         <div className="flex flex-col w-full h-full items-center justify-center">
-          <Link className="font-bold text-3xl mb-4" to="/">
+          <Link className="clickable font-bold text-3xl mb-3" to="/">
             SplitEx
           </Link>
           <Switch>

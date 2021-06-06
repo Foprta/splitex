@@ -1,10 +1,14 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
+  mode: "jit",
   purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      blur: {
+        1: "1px",
+      },
       borderWidth: {
         1: "1px",
         3: "3px",
@@ -26,13 +30,6 @@ module.exports = {
       red: colors.red,
       yellow: colors.amber,
       green: colors.green,
-    },
-  },
-  variants: {
-    extend: {
-      borderWidth: ["focus", "hover"],
-      borderRadius: ["first", "last"],
-      margin: ["first", "last"],
     },
   },
   plugins: [],

@@ -44,7 +44,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  @apply m-0 px-4 pb-4 pt-2;
+  @apply m-0 px-3 pb-3 pt-1.5;
 }
 
 .block-header {
@@ -52,13 +52,23 @@ body {
 }
 
 .clickable {
-  @apply duration-150 h-5 border-b-2 border-blue-300 bg-blue-100 inline-block bg-opacity-50;
-  @apply hover:border-blue-400 hover:bg-blue-200 hover:bg-opacity-70 hover:border-b-3;
-  @apply focus:border-blue-400 focus:bg-blue-200 focus:bg-opacity-70 focus:outline-none focus:border-b-3;
+  @apply relative;
+  @apply focus:outline-none;
+}
+
+.clickable::before {
+  content: "";
+  z-index: -1;
+  @apply duration-150 absolute w-full bg-blue-400 bg-opacity-30 h-1 bottom-0;
+}
+
+.clickable:hover::before,
+.clickable:focus::before {
+  @apply bg-opacity-30 bg-blue-500 h-3;
 }
 
 .dialog {
-  @apply fixed z-10 inset-0 overflow-y-auto flex items-center mx-4 flex justify-center;
+  @apply fixed z-10 inset-0 overflow-y-auto flex items-center mx-3 flex justify-center;
 }
 
 .dialog-overlay {
@@ -66,5 +76,5 @@ body {
 }
 
 .dialog-content {
-  @apply overflow-hidden transform bg-white shadow-xl p-4;
+  @apply overflow-hidden transform bg-white shadow-xl p-3;
 }
