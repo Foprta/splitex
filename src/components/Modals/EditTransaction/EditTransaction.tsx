@@ -1,11 +1,11 @@
 import { Dialog } from "@headlessui/react";
-import firebase from "../../config/firebase.config";
-import Input from "../UI/Input";
+import firebase from "../../../config/firebase.config";
+import Input from "../../UI/Input";
 import { useState } from "react";
-import Button from "../UI/Button";
-import { IManualTransaction } from "../../stores/manual-transactions.store";
-import { IUser } from "../../stores/users.store";
-import UserName from "../UI/UserName";
+import Button from "../../UI/Button";
+import { IManualTransaction } from "../../../stores/manual-transactions.store";
+import { IUser } from "../../../stores/users.store";
+import UserName from "../../UI/UserName";
 
 interface Props {
   groupId: string;

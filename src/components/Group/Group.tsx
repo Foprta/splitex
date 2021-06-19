@@ -54,14 +54,10 @@ class Group extends React.Component<Props> {
           manualTransactions={manualTransactionsStore.manualTransactions}
           expensesSettings={expensesSettingsStore.expensesSettings}
         />
+
         <div className="block-header">Траты участников</div>
-        <Expenses
-          groupId={groupsStore.group?.id}
-          users={usersStore.users}
-          expenses={expensesStore.expenses}
-          manualTransactions={manualTransactionsStore.manualTransactions}
-          expensesSettings={expensesSettingsStore.expensesSettings}
-        />
+
+        <Expenses />
       </div>
     );
   }

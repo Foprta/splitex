@@ -1,6 +1,7 @@
 import Store, { IFirestoreEntity } from "./_store";
 import { action, makeObservable, observable } from "mobx";
 import firebase from "firebase/app";
+import groupsStore from "./groups.store";
 
 export interface IExpenseSettings extends IFirestoreEntity {
   expenseId: string;
@@ -11,6 +12,7 @@ export interface IExpenseSettings extends IFirestoreEntity {
 
 class ExpensesSettingsStore extends Store {
   @observable expensesSettings: IExpenseSettings[] = [];
+  @observable expensesSettingsMap: Record<string, IExpenseSettings[]> = {};
 
   private expensesSettingsUnsub = () => {};
 
@@ -36,17 +38,47 @@ class ExpensesSettingsStore extends Store {
             id: doc.id,
             ...doc.data(),
           })) as IExpenseSettings[];
+
+          this.expensesSettings.forEach((e) =>
+            this.expensesSettingsMap[e.expenseId]
+              ? this.expensesSettingsMap[e.expenseId].push(e)
+              : (this.expensesSettingsMap[e.expenseId] = [e])
+          );
         } else {
           this.expensesSettings = [];
         }
       });
   };
 
-  editExpense = (groupId: string, expenseId: string, amount: number) =>
-    firebase.firestore().collection("groups").doc(groupId).collection("expenses").doc(expenseId).update({ amount });
+  editExpenseSettings = (settings: Record<string, IExpenseSettings>, expenseId: string) => {
+    const groupId = groupsStore.group.id;
 
-  deleteExpense = (groupId: string, expenseId: string) =>
-    firebase.firestore().collection("groups").doc(groupId).collection("expenses").doc(expenseId).delete();
+    Object.entries(settings).forEach(([userId, setting]: any) => {
+      firebase
+        .firestore()
+        .collection("groups")
+        .doc(groupId)
+        .collection("expensesSettings")
+        .where("expenseId", "==", expenseId)
+        .where("userId", "==", userId)
+        .get()
+        .then(
+          ({ docs }): Promise<any> => {
+            if (docs.length) {
+              return docs[0].ref.set(setting, { merge: true });
+            } else {
+              return firebase
+                .firestore()
+                .collection("groups")
+                .doc(groupId)
+                .collection("expensesSettings")
+                .add({ ...setting, userId, expenseId });
+            }
+          }
+        )
+        .catch(console.error);
+    });
+  };
 }
 
 const expensesSettingsStore = new ExpensesSettingsStore();

@@ -1,9 +1,9 @@
 import { Dialog } from "@headlessui/react";
-import firebase from "../../config/firebase.config";
-import Input from "../UI/Input";
+import firebase from "../../../config/firebase.config";
+import Input from "../../UI/Input";
 import { useState } from "react";
-import Button from "../UI/Button";
-import { IUser } from "../../stores/users.store";
+import Button from "../../UI/Button";
+import { IUser } from "../../../stores/users.store";
 
 interface Props {
   groupId: string;

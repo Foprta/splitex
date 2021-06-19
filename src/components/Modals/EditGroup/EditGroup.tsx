@@ -1,9 +1,9 @@
 import { Dialog } from "@headlessui/react";
-import firebase from "../../config/firebase.config";
-import Input from "../UI/Input";
+import firebase from "../../../config/firebase.config";
+import Input from "../../UI/Input";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import Button from "../UI/Button";
+import Button from "../../UI/Button";
 
 interface Props {
   group: any;

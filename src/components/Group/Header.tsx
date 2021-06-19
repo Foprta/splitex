@@ -1,6 +1,6 @@
 import Money from "../UI/Money";
 import React, { useState } from "react";
-import EditGroup from "./EditGroup";
+import EditGroup from "../Modals/EditGroup/EditGroup";
 import { IExpense } from "../../stores/expenses.store";
 import GroupName from "../UI/GroupName";
 

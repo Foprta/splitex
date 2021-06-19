@@ -1,6 +1,6 @@
 import Money from "../UI/Money";
 import { useState } from "react";
-import EditTransaction from "./EditTransaction";
+import EditTransaction from "../Modals/EditTransaction/EditTransaction";
 import { ArrowNarrowRightIcon } from "@heroicons/react/outline";
 import { IManualTransaction } from "../../stores/manual-transactions.store";
 import { IUser } from "../../stores/users.store";

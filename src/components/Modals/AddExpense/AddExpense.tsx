@@ -15,7 +15,7 @@ interface Props {
   setIsOpen: (isOpen: boolean) => void;
 }
 
-function NewExpense({ isOpen, setIsOpen, user }: Props) {
+function AddExpense({ isOpen, setIsOpen, user }: Props) {
   const [type, setType] = useState<ExpenseType>(ExpenseType.EXPENSE);
   const [amount, setAmount] = useState(0);
   const [toUser, setToUser] = useState<IUser | undefined>();
@@ -38,7 +38,7 @@ function NewExpense({ isOpen, setIsOpen, user }: Props) {
           .then(closeModal)
           .catch(console.error);
     }
-  }, [amount, closeModal, toUser.id, type, user.id]);
+  }, [amount, closeModal, toUser?.id, type, user.id]);
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -74,4 +74,4 @@ function NewExpense({ isOpen, setIsOpen, user }: Props) {
   );
 }
 
-export default NewExpense;
+export default AddExpense;

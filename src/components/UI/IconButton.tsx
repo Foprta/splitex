@@ -1,23 +1,22 @@
-import { ReactNode } from "react";
+import classNames from "classnames";
+import React from "react";
 
 interface Props {
   className?: string;
   onClick?: () => void;
-  children: ReactNode;
 }
 
-function IconButton({ className, onClick, children }: Props) {
+function IconButton({ className, ...props }: React.PropsWithChildren<Props>) {
   return (
     <button
-      className={
-        `duration-150 border-[1px] border-gray-300 p-1 text-black 
-        hover:bg-gray-100 
-        focus:outline-none focus:border-blue-300 focus:bg-blue-100 ` + className
-      }
-      onClick={onClick}
-    >
-      {children}
-    </button>
+      className={classNames(
+        "duration-150 border-[1px] border-gray-300 p-1 text-black",
+        "hover:bg-gray-100",
+        "focus:outline-none focus:border-blue-300 focus:bg-blue-100",
+        className
+      )}
+      {...props}
+    />
   );
 }
 
