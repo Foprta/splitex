@@ -62,7 +62,7 @@ function Expense({ groupId, expense, userName, users, expenseSettings }: Props) 
     <div className="flex justify-between items-center py-1.5">
       <UserName userName={userName} />
 
-      <button className="clickable text-red-600" onClick={() => setIsEditorOpen(true)}>
+      <button className="text-red-600 clickable" onClick={() => setIsEditorOpen(true)}>
         <Money amount={expense.amount} />
       </button>
 

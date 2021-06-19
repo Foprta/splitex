@@ -1,23 +1,13 @@
-import { ReactNode } from "react";
+import classNames from "classnames";
+import React from "react";
 
 interface Props {
-  className?: string;
-  onClick?: () => void;
-  children: ReactNode;
+  className: string;
+  onClick: () => void;
 }
 
-function Button({ className, onClick, children }: Props) {
-  return (
-    <button
-      className={
-        "bg-transparent hover:bg-gray-100 border-1 border-gray-400 rounded-xl focus:outline-none focus-within:outline-none p-1 text-black " +
-        className
-      }
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
+function Button({ className, ...props }: React.PropsWithChildren<Partial<Props>>) {
+  return <button className={classNames("rounded-none p-1 border-[1px]", className)} {...props} />;
 }
 
 export default Button;

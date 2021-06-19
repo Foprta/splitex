@@ -45,13 +45,13 @@ function EditTransaction({ groupId, transaction, isOpen, setIsOpen, userName, us
 
   return (
     <Dialog
-      className="fixed z-10 inset-0 overflow-y-auto flex items-center mx-4"
+      className="flex overflow-y-auto fixed inset-0 z-10 items-center mx-4"
       open={isOpen}
       onClose={() => setIsOpen(false)}
     >
       <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
-      <div className="inline-block w-full max-w-md p-4 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+      <div className="inline-block overflow-hidden p-4 w-full max-w-md text-left align-middle bg-white rounded-2xl shadow-xl transition-all transform">
         <Dialog.Title>
           Трата <UserName userName={userName} />
         </Dialog.Title>
@@ -78,7 +78,7 @@ function EditTransaction({ groupId, transaction, isOpen, setIsOpen, userName, us
           <Button className="mr-2" onClick={() => setIsOpen(false)}>
             Отмена
           </Button>
-          <Button className="mr-2 bg-red-400 text-white" onClick={deleteTransaction}>
+          <Button className="mr-2 text-white bg-red-400" onClick={deleteTransaction}>
             Удалить
           </Button>
           <Button className="bg-green-400" onClick={editTransaction}>

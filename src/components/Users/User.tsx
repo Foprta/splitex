@@ -4,7 +4,7 @@ import EditUser from "./EditUser";
 import { IUser } from "../../stores/users.store";
 import { IExpense } from "../../stores/expenses.store";
 import UserName from "../UI/UserName";
-import NewExpenseModal from "./NewExpenseModal";
+import NewExpense from "../Modals/NewExpense/NewExpense";
 
 interface Props {
   user: IUser;
@@ -29,11 +29,8 @@ function User({ user, groupId, expenses, users }: Props) {
         <Money amount={totalExpenses} />
       </button>
 
-      {newExpenseOpened && <NewExpenseModal user={user} isOpen={newExpenseOpened} setIsOpen={setNewExpenseOpened} />}
-
-      {editUserOpened && (
-        <EditUser groupId={groupId} user={user} isOpen={editUserOpened} setIsOpen={setEditUserOpened} />
-      )}
+      <NewExpense user={user} isOpen={newExpenseOpened} setIsOpen={setNewExpenseOpened} />
+      <EditUser groupId={groupId} user={user} isOpen={editUserOpened} setIsOpen={setEditUserOpened} />
     </div>
   );
 }

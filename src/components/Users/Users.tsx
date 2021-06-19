@@ -12,7 +12,7 @@ interface Props {
 function Users({ users, groupId, expenses }: Props) {
   return (
     <div>
-      <div className="divide-y-1 divide-gray-300">
+      <div className="divide-y-[1px] divide-gray-300">
         {users.map((user) => {
           const userExpenses = expenses.filter(({ userId }) => userId === user.id);
 

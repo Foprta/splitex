@@ -18,7 +18,7 @@ function Expenses({ groupId, users, expenses, manualTransactions, expensesSettin
   const usersMap = createUsersMap(users);
 
   return (
-    <div className="flex flex-col divide-y-1 divide-gray-300">
+    <div className="flex flex-col divide-y-[1px] divide-gray-300">
       {expenses.map((expense) => {
         const expenseSettings = expensesSettings.filter(({ expenseId }) => expenseId === expense.id);
 

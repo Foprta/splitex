@@ -27,7 +27,7 @@ class Group extends React.Component<Props> {
 
     this.props.groupsStore.groupSub(groupId);
     this.props.usersStore.usersSub(groupId);
-    this.props.expensesStore.expensesSub(groupId);
+    this.props.expensesStore.expensesListener(groupId);
     this.props.manualTransactionsStore.manualTransactionsSub(groupId);
     this.props.expensesSettingsStore.expensesSettingsSub(groupId);
   }

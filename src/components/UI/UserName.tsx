@@ -3,7 +3,7 @@ interface Props {
 }
 
 function UserName(props: Props) {
-  return <span>{props.userName}</span>;
+  return <i>{props.userName}</i>;
 }
 
 export default UserName;

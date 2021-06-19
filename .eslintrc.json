@@ -1,3 +1,4 @@
 {
-  "extends": ["react-app", "react-app/jest"]
+  "plugins": ["tailwindcss"],
+  "extends": ["react-app", "react-app/jest", "plugin:tailwindcss/recommended"]
 }

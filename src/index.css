@@ -66,15 +66,3 @@ body {
 .clickable:focus::before {
   @apply bg-opacity-30 bg-blue-500 h-3;
 }
-
-.dialog {
-  @apply fixed z-10 inset-0 overflow-y-auto flex items-center mx-3 flex justify-center;
-}
-
-.dialog-overlay {
-  @apply fixed inset-0 bg-black opacity-30;
-}
-
-.dialog-content {
-  @apply overflow-hidden transform bg-white shadow-xl p-3;
-}

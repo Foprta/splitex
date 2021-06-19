@@ -1,6 +1,7 @@
 import Store, { IFirestoreEntity } from "./_store";
 import { action, makeObservable, observable } from "mobx";
 import firebase from "firebase/app";
+import { ExpenseType } from "../models/enums";
 
 export interface IExpense extends IFirestoreEntity {
   userId: string;
@@ -22,7 +23,7 @@ class ExpensesStore extends Store {
     this.expenses = [];
   }
 
-  @action expensesSub = (id: string): void => {
+  @action expensesListener = (id: string): void => {
     this.expensesUnsub = firebase
       .firestore()
       .collection("groups")
@@ -40,11 +41,20 @@ class ExpensesStore extends Store {
       });
   };
 
+  addExpense = (groupId: string, amount: number, userId: string) =>
+    firebase.firestore().collection("groups").doc(groupId).collection(ExpenseType.EXPENSE).add({ amount, userId });
+
   editExpense = (groupId: string, expenseId: string, amount: number) =>
-    firebase.firestore().collection("groups").doc(groupId).collection("expenses").doc(expenseId).update({ amount });
+    firebase
+      .firestore()
+      .collection("groups")
+      .doc(groupId)
+      .collection(ExpenseType.EXPENSE)
+      .doc(expenseId)
+      .update({ amount });
 
   deleteExpense = (groupId: string, expenseId: string) =>
-    firebase.firestore().collection("groups").doc(groupId).collection("expenses").doc(expenseId).delete();
+    firebase.firestore().collection("groups").doc(groupId).collection(ExpenseType.EXPENSE).doc(expenseId).delete();
 }
 
 const expensesStore = new ExpensesStore();

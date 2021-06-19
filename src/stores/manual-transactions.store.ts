@@ -1,6 +1,7 @@
 import Store, { IFirestoreEntity } from "./_store";
 import { action, makeObservable, observable } from "mobx";
 import firebase from "firebase/app";
+import { ExpenseType } from "../models/enums";
 
 export interface ITransaction {
   fromUserId: string;
@@ -42,6 +43,14 @@ class ManualTransactionsStore extends Store {
         }
       });
   };
+
+  addManualTransaction = (groupId: string, amount: number, fromUserId: string, toUserId: string) =>
+    firebase
+      .firestore()
+      .collection("groups")
+      .doc(groupId)
+      .collection(ExpenseType.MANUAL_TRANSACTION)
+      .add({ amount, fromUserId, toUserId } as ITransaction);
 }
 
 const manualTransactionsStore = new ManualTransactionsStore();

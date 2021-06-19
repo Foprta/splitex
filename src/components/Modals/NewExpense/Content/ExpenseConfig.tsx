@@ -1,11 +1,11 @@
-import Input from "../UI/Input";
+import Input from "../../../UI/Input";
 
 interface Props {
   amount: number;
   setAmount: (amount: number) => void;
 }
 
-function AddExpense({ amount, setAmount }: Props) {
+function ExpenseConfig({ amount, setAmount }: Props) {
   return (
     <Input
       className="my-2"
@@ -17,4 +17,4 @@ function AddExpense({ amount, setAmount }: Props) {
   );
 }
 
-export default AddExpense;
+export default ExpenseConfig;
