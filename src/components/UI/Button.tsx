@@ -7,7 +7,7 @@ interface Props {
 }
 
 function Button({ className, ...props }: React.PropsWithChildren<Partial<Props>>) {
-  return <button className={classNames("rounded-none p-1 border-[1px]", className)} {...props} />;
+  return <button className={classNames("rounded-none px-2 py-1 uppercase ", className)} {...props} />;
 }
 
 export default Button;

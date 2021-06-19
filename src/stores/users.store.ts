@@ -35,6 +35,7 @@ class UsersStore extends Store {
         if (snapshot.docs.length) {
           this.users = snapshot.docs.map((doc) => ({
             id: doc.id,
+            ref: doc.ref,
             ...doc.data(),
           })) as IUser[];
 

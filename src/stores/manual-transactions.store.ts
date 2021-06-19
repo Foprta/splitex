@@ -36,6 +36,7 @@ class ManualTransactionsStore extends Store {
         if (snapshot.docs.length) {
           this.manualTransactions = snapshot.docs.map((doc) => ({
             id: doc.id,
+            ref: doc.ref,
             ...doc.data(),
           })) as IManualTransaction[];
         } else {

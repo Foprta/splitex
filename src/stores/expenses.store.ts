@@ -33,6 +33,7 @@ class ExpensesStore extends Store {
         if (snapshot.docs.length) {
           this.expenses = snapshot.docs.map((doc) => ({
             id: doc.id,
+            ref: doc.ref,
             ...doc.data(),
           })) as IExpense[];
         } else {
@@ -52,9 +53,6 @@ class ExpensesStore extends Store {
       .collection(ExpenseType.EXPENSE)
       .doc(expenseId)
       .update({ amount });
-
-  deleteExpense = (groupId: string, expenseId: string) =>
-    firebase.firestore().collection("groups").doc(groupId).collection(ExpenseType.EXPENSE).doc(expenseId).delete();
 }
 
 const expensesStore = new ExpensesStore();

@@ -27,9 +27,9 @@ class GroupsStore extends Store {
       .firestore()
       .collection("groups")
       .doc(id)
-      .onSnapshot((snapshot: any) => {
+      .onSnapshot((snapshot) => {
         if (snapshot.exists) {
-          this.group = { id: snapshot.id, ...snapshot.data() } as IGroup;
+          this.group = { id: snapshot.id, ref: snapshot.ref, ...snapshot.data() } as IGroup;
         } else {
           this.group = undefined;
         }
@@ -40,11 +40,12 @@ class GroupsStore extends Store {
     firebase
       .firestore()
       .collection("groups")
-      .onSnapshot((snapshot: any) => {
+      .onSnapshot((snapshot) => {
         this.groups = snapshot.docs.map((doc) => ({
           id: doc.id,
+          ref: doc.ref,
           ...doc.data(),
-        }));
+        })) as IGroup[];
       });
 
   addGroup = (name: string) => firebase.firestore().collection("groups").add({ name });

@@ -48,6 +48,7 @@ class Group extends React.Component<Props> {
         <Header group={groupsStore.group} expenses={expensesStore.expenses} />
         <Users groupId={groupsStore.group?.id} users={usersStore.users} expenses={expensesStore.expenses} />
         <div className="block-header">Необходимые переводы</div>
+
         <Transactions
           users={usersStore.users}
           expenses={expensesStore.expenses}

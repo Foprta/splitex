@@ -11,7 +11,7 @@ export interface IExpenseSettings extends IFirestoreEntity {
 }
 
 class ExpensesSettingsStore extends Store {
-  @observable expensesSettings: IExpenseSettings[] = [];
+  @observable expensesSettings: IExpenseSettings[] | undefined;
   @observable expensesSettingsMap: Record<string, IExpenseSettings[]> = {};
 
   private expensesSettingsUnsub = () => {};
@@ -24,6 +24,7 @@ class ExpensesSettingsStore extends Store {
   @action resetExpensesSettings(): void {
     this.expensesSettingsUnsub();
     this.expensesSettings = [];
+    this.expensesSettingsMap = {};
   }
 
   @action expensesSettingsSub = (id: string): void => {
@@ -36,6 +37,7 @@ class ExpensesSettingsStore extends Store {
         if (snapshot.docs.length) {
           this.expensesSettings = snapshot.docs.map((doc) => ({
             id: doc.id,
+            ref: doc.ref,
             ...doc.data(),
           })) as IExpenseSettings[];
 
@@ -46,6 +48,7 @@ class ExpensesSettingsStore extends Store {
           );
         } else {
           this.expensesSettings = [];
+          this.expensesSettingsMap = {};
         }
       });
   };
@@ -53,31 +56,18 @@ class ExpensesSettingsStore extends Store {
   editExpenseSettings = (settings: Record<string, IExpenseSettings>, expenseId: string) => {
     const groupId = groupsStore.group.id;
 
-    Object.entries(settings).forEach(([userId, setting]: any) => {
-      firebase
-        .firestore()
-        .collection("groups")
-        .doc(groupId)
-        .collection("expensesSettings")
-        .where("expenseId", "==", expenseId)
-        .where("userId", "==", userId)
-        .get()
-        .then(
-          ({ docs }): Promise<any> => {
-            if (docs.length) {
-              return docs[0].ref.set(setting, { merge: true });
-            } else {
-              return firebase
-                .firestore()
-                .collection("groups")
-                .doc(groupId)
-                .collection("expensesSettings")
-                .add({ ...setting, userId, expenseId });
-            }
-          }
-        )
-        .catch(console.error);
+    const batch = firebase.firestore().batch();
+
+    Object.values(settings).forEach((s) => {
+      if (s.id == null) {
+        const newDoc = firebase.firestore().collection("groups").doc(groupId).collection("expensesSettings").doc();
+        batch.set(newDoc, { ...s, expenseId });
+      } else {
+        batch.update(s.ref, s);
+      }
     });
+
+    return batch;
   };
 }
 

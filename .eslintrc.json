@@ -1,4 +1,7 @@
 {
   "plugins": ["tailwindcss"],
-  "extends": ["react-app", "react-app/jest", "plugin:tailwindcss/recommended"]
+  "extends": ["react-app", "react-app/jest", "plugin:tailwindcss/recommended"],
+  "rules": {
+    "react-hooks/exhaustive-deps": "off"
+  }
 }

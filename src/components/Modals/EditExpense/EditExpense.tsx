@@ -1,12 +1,12 @@
 import Button from "../../UI/Button";
-import expensesStore, { IExpense } from "../../../stores/expenses.store";
-import React, { useCallback, useState } from "react";
+import { IExpense } from "../../../stores/expenses.store";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import UserName from "../../UI/UserName";
 import Modal from "../../UI/Modal";
-import expensesSettingsStore, { IExpenseSettings } from "../../../stores/expenses-settings.store";
-import groupsStore from "../../../stores/groups.store";
+import expensesSettingsStore from "../../../stores/expenses-settings.store";
 import usersStore from "../../../stores/users.store";
 import Content from "./Content/Content";
+import { observer } from "mobx-react";
 
 interface Props {
   expense: IExpense;
@@ -16,53 +16,42 @@ interface Props {
 
 function EditExpense({ expense, isOpen, setIsOpen }: Props) {
   const [amount, setAmount] = useState(expense.amount);
+  const [settings, setSettings] = useState({});
 
-  const mappedExpenseSettings = {};
-  expensesSettingsStore.expensesSettingsMap[expense.id]?.forEach(
-    ({ userId, proportion, personal }) => (mappedExpenseSettings[userId] = { proportion, personal })
-  );
+  useEffect(() => {
+    if (expensesSettingsStore.expensesSettings === undefined) return;
+    const result = {};
+    expensesSettingsStore.expensesSettingsMap[expense.id]?.forEach((e) => (result[e.userId] = e));
+    setSettings(result);
+  }, [expensesSettingsStore.expensesSettings]);
 
-  const [expensesSettings, setExpensesSettings] = useState<Record<string, IExpenseSettings>>(mappedExpenseSettings);
+  const closeModal = useCallback(() => setIsOpen(false), []);
 
-  const groupId = groupsStore.group.id;
-
-  const closeModal = useCallback(() => setIsOpen(false), [setIsOpen]);
-
-  const deleteExpense = useCallback(() => expensesStore.deleteExpense(groupId, expense.id).catch(console.error), [
-    expense.id,
-    groupId,
-  ]);
+  const deleteExpense = useCallback(() => expense.ref.delete().catch(console.error), []);
 
   const editExpense = useCallback(() => {
-    expensesSettingsStore.editExpenseSettings(expensesSettings, expense.id);
-    expensesStore.editExpense(groupId, expense.id, amount).then(closeModal).catch(console.error);
-  }, [amount, closeModal, expense.id, expensesSettings, groupId]);
+    const batch = expensesSettingsStore.editExpenseSettings(settings, expense.id);
+    batch.update(expense.ref, { amount }).commit().then(closeModal).catch(console.error);
+  }, [settings, amount]);
 
   return (
     <Modal isOpen={isOpen} closeModal={closeModal}>
       {{
         title: (
           <>
-            Трата <UserName userName={usersStore.usersMap[expense.userId]} />
+            Трата <UserName userName={useMemo(() => usersStore.usersMap[expense.userId], [])} />
           </>
         ),
-        content: (
-          <Content
-            amount={amount}
-            setAmount={setAmount}
-            settings={expensesSettings}
-            setSettings={setExpensesSettings}
-          />
-        ),
+        content: <Content amount={amount} setAmount={setAmount} settings={settings} setSettings={setSettings} />,
         actions: (
           <>
             <Button className="mr-2" onClick={() => setIsOpen(false)}>
               Отмена
             </Button>
-            <Button className="mr-2 text-white bg-red-400" onClick={deleteExpense}>
+            <Button className="mr-2 text-white bg-red-600" onClick={deleteExpense}>
               Удалить
             </Button>
-            <Button className="bg-green-400" onClick={editExpense}>
+            <Button className="text-white bg-green-600" onClick={editExpense}>
               Сохранить
             </Button>
           </>
@@ -72,4 +61,4 @@ function EditExpense({ expense, isOpen, setIsOpen }: Props) {
   );
 }
 
-export default EditExpense;
+export default observer(EditExpense);

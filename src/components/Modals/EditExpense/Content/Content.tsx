@@ -21,13 +21,13 @@ function Content({ amount, setAmount, settings, setSettings }: Props) {
         type="number"
         onChange={useCallback(
           (e: React.ChangeEvent<HTMLInputElement>) => setAmount(parseFloat(e.currentTarget.value)),
-          [setAmount]
+          []
         )}
       />
 
-      <UsersSettingsList expensesSettings={settings} setExpensesSettings={setSettings} />
+      <UsersSettingsList settings={settings} setSettings={setSettings} />
     </>
   );
 }
 
-export default observer(Content);
+export default Content;

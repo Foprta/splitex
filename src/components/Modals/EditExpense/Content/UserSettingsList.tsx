@@ -5,19 +5,19 @@ import UserSettings from "./UserSettings";
 import { IExpenseSettings } from "../../../../stores/expenses-settings.store";
 
 interface Props {
-  expensesSettings: Record<string, IExpenseSettings>;
-  setExpensesSettings: (v: Record<string, IExpenseSettings>) => void;
+  settings: Record<string, IExpenseSettings>;
+  setSettings: (v: Record<string, IExpenseSettings>) => void;
 }
 
-function UsersSettingsList({ expensesSettings, setExpensesSettings }: Props) {
+function UsersSettingsList({ settings, setSettings }: Props) {
   return (
     <>
       {usersStore.users.map((user) => (
         <UserSettings
           key={user.id}
           user={user}
-          expensesSettings={expensesSettings}
-          setExpensesSettings={setExpensesSettings}
+          settings={settings[user.id]}
+          setSettings={(v) => setSettings({ ...settings, [user.id]: v })}
         />
       ))}
     </>
