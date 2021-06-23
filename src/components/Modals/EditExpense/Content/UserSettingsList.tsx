@@ -11,16 +11,25 @@ interface Props {
 
 function UsersSettingsList({ settings, setSettings }: Props) {
   return (
-    <>
-      {usersStore.users.map((user) => (
-        <UserSettings
-          key={user.id}
-          user={user}
-          settings={settings[user.id]}
-          setSettings={(v) => setSettings({ ...settings, [user.id]: v })}
-        />
-      ))}
-    </>
+    <table className="w-full">
+      <thead>
+        <tr>
+          <th> </th>
+          <th>Пропорция, коэф</th>
+          <th>Личные траты, руб</th>
+        </tr>
+      </thead>
+      <tbody>
+        {usersStore.users.map((user) => (
+          <UserSettings
+            key={user.id}
+            user={user}
+            settings={settings[user.id]}
+            setSettings={(v) => setSettings({ ...settings, [user.id]: v })}
+          />
+        ))}
+      </tbody>
+    </table>
   );
 }
 

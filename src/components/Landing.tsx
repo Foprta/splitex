@@ -49,7 +49,7 @@ class Landing extends React.Component<Props, State> {
       <div className="flex flex-col w-full">
         <div className="flex flex-col divide-y-[1px] divide-gray-300">
           {groups.map(({ id, name }: any) => (
-            <div className="py-1.5 first:pt-0">
+            <div key={id} className="py-1.5 first:pt-0">
               <Link className="clickable" key={id} to={id}>
                 <GroupName groupName={name} />
               </Link>

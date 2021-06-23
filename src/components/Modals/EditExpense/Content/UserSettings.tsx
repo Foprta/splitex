@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import Input from "../../../UI/Input";
 import { IUser } from "../../../../stores/users.store";
 import { IExpenseSettings } from "../../../../stores/expenses-settings.store";
+import UserName from "../../../UI/UserName";
 
 interface Props {
   user: IUser;
@@ -10,32 +11,40 @@ interface Props {
   setSettings: (v: IExpenseSettings) => void;
 }
 
-function UsersSettings({ user, settings, setSettings }: Props) {
+function UserSettings({ user, settings, setSettings }: Props) {
   return (
-    <div className="flex">
-      <span>{user.name}</span>
-      <Input
-        type="number"
-        placeholder="Пропорция"
-        value={settings?.proportion ?? 1}
-        onChange={useCallback(
-          (e: React.ChangeEvent<HTMLInputElement>) =>
-            setSettings({ ...settings, userId: user.id, proportion: parseInt(e.currentTarget.value) }),
-          []
-        )}
-      />
-      <Input
-        type="number"
-        placeholder="Сумма"
-        value={settings?.personal ?? 0}
-        onChange={useCallback(
-          (e: React.ChangeEvent<HTMLInputElement>) =>
-            setSettings({ ...settings, userId: user.id, personal: parseInt(e.currentTarget.value) }),
-          []
-        )}
-      />
-    </div>
+    <tr>
+      <td>
+        <UserName className="mr-2" userName={user.name} />
+      </td>
+      <td>
+        <Input
+          type="number"
+          placeholder="Пропорция"
+          className="w-full "
+          value={settings?.proportion ?? 1}
+          onChange={useCallback(
+            (e: React.ChangeEvent<HTMLInputElement>) =>
+              setSettings({ ...settings, userId: user.id, proportion: parseInt(e.currentTarget.value) }),
+            []
+          )}
+        />
+      </td>
+      <td>
+        <Input
+          type="number"
+          placeholder="Сумма"
+          className="w-full"
+          value={settings?.personal ?? 0}
+          onChange={useCallback(
+            (e: React.ChangeEvent<HTMLInputElement>) =>
+              setSettings({ ...settings, userId: user.id, personal: parseInt(e.currentTarget.value) }),
+            []
+          )}
+        />
+      </td>
+    </tr>
   );
 }
 
-export default observer(UsersSettings);
+export default observer(UserSettings);

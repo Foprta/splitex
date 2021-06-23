@@ -1,17 +1,17 @@
-import { ComponentProps } from "react";
 import classNames from "classnames";
+import React from "react";
 
-function Input({ value, onChange, placeholder, type, className }: ComponentProps<any>) {
+function Input({
+  className,
+  ...props
+}: React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) {
   return (
     <input
       className={classNames(
-        "duration-150 bg-blue-200 bg-opacity-0 w-full border-[1px] px-2 py-1 border-gray-300 focus:outline-none focus:bg-opacity-70 focus:border-blue-300",
+        "duration-150 bg-blue-200 bg-opacity-0 border-[1px] px-2 py-1 border-gray-300 focus:outline-none focus:bg-opacity-70 focus:border-blue-300",
         className
       )}
-      placeholder={placeholder}
-      type={type || "text"}
-      value={value}
-      onChange={onChange}
+      {...props}
     />
   );
 }

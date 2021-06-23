@@ -21,6 +21,7 @@ function AddUser({ groupId }: ComponentProps<any>) {
     <div className="flex justify-center my-4">
       <Input
         placeholder="Добавьте нового участника"
+        className="w-full"
         value={name}
         onChange={(e: any) => setName(e.currentTarget.value)}
       />

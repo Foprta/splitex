@@ -20,7 +20,7 @@ function Modal({ isOpen, closeModal, children }: Props) {
     >
       <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
 
-      <div className="p-2 bg-white shadow-xl transform">
+      <div className="p-2 max-w-full bg-white shadow-xl transform">
         <Dialog.Title className="mb-2 text-lg">{children.title}</Dialog.Title>
 
         {children.content}
