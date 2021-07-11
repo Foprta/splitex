@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build-folder
-          path: build
+          path: dist
 
   deploy:
     if: ${{ github.event_name != 'pull_request' }}
