@@ -36,7 +36,7 @@ function Group({ match }: RouteComponentProps<Props>) {
 
   return (
     <div className="flex flex-col w-full">
-      <Header group={groupsStore.group} expenses={expensesStore.expenses} />
+      <Header />
       <Users groupId={groupsStore.group?.id} users={usersStore.users} expenses={expensesStore.expenses} />
 
       <div className="block-header">Необходимые переводы</div>

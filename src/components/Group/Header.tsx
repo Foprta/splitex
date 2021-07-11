@@ -1,18 +1,17 @@
 import Money from "../UI/Money";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import EditGroup from "../Modals/EditGroup/EditGroup";
-import { IExpense } from "../../stores/expenses.store";
 import GroupName from "../UI/GroupName";
+import groupsStore from "../../stores/groups.store";
+import expensesStore from "../../stores/expenses.store";
 
-interface Props {
-  group: any;
-  expenses: IExpense[];
-}
-
-function Header({ group, expenses }: Props) {
+function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const sumOfExpenses = expenses.reduce((acc, { amount }) => acc + amount, 0);
+  const group = groupsStore.group;
+  const sumOfExpenses = useMemo(() => expensesStore.expenses.reduce((acc, { amount }) => acc + amount, 0), [
+    expensesStore.expenses,
+  ]);
 
   return (
     <div className="flex justify-between items-center mb-1.5">
@@ -29,7 +28,7 @@ function Header({ group, expenses }: Props) {
       </div>
       <Money className="font-bold" amount={sumOfExpenses} />
 
-      {group && isOpen && <EditGroup group={group} isOpen={isOpen} setIsOpen={setIsOpen} />}
+      {group && <EditGroup isOpen={isOpen} setIsOpen={setIsOpen} />}
     </div>
   );
 }

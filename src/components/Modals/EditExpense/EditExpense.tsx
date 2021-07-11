@@ -39,7 +39,7 @@ function EditExpense({ expense, isOpen, setIsOpen }: Props) {
       {{
         title: (
           <>
-            Покупка <UserName userName={useMemo(() => usersStore.usersMap[expense.userId], [])} />
+            <UserName userName={useMemo(() => usersStore.usersMap[expense.userId], [])} /> потратил
           </>
         ),
         content: <Content amount={amount} setAmount={setAmount} settings={settings} setSettings={setSettings} />,

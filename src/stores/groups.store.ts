@@ -49,6 +49,8 @@ class GroupsStore extends Store {
       });
 
   addGroup = (name: string) => firebase.firestore().collection("groups").add({ name });
+  editGroup = (fields: Partial<IGroup>) => this.group.ref.update(fields);
+  deleteGroup = (id: string) => firebase.firestore().collection("groups").doc(id).delete();
 }
 
 const groupsStore = new GroupsStore();
