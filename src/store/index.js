@@ -1,8 +1,6 @@
 import { createStore } from "vuex";
+import groups from "./groups";
 
 export default createStore({
-  state: {},
-  mutations: {},
-  actions: {},
-  modules: {},
+  modules: { groups },
 });
