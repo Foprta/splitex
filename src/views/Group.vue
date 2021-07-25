@@ -1,13 +1,15 @@
 <template>
   <div>
-    <h1>This is an about page</h1>
+    <group-header :group="group"></group-header>
   </div>
 </template>
 
 <script>
 import { GroupsService } from "../services/groups";
+import GroupHeader from "../components/Group/GroupHeader";
 
 export default {
+  components: { GroupHeader },
   mounted() {
     this.groupUnsub = GroupsService.groupSubscriber(
       this.$route.params.groupId
@@ -28,6 +30,11 @@ export default {
         });
       }
     });
+  },
+  computed: {
+    group() {
+      return this.$store.getters.getGroup(this.$route.params.groupId);
+    },
   },
   unmounted() {
     this.groupUnsub();

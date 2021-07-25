@@ -1,11 +1,9 @@
 <template>
   <div class="divide-y-[1px]">
     <div class="py-1.5" v-for="group in groups" :key="group.id">
-      <group-name>
-        <router-link class="clickable" :to="group.id">
-          {{ group.name }}
-        </router-link>
-      </group-name>
+      <router-link class="clickable" :to="group.id">
+        <group-name :name="group.name" />
+      </router-link>
     </div>
   </div>
 </template>

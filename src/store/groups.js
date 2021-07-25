@@ -35,6 +35,9 @@ export default {
     allGroups(state) {
       return state.groups;
     },
+    getGroup: (state) => (id) => {
+      return state.groups.find((group) => group.id === id);
+    },
   },
   actions: {
     addGroup(ctx, name) {
